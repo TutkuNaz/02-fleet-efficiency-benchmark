@@ -1,0 +1,26 @@
+{
+  "data_quality": {
+    "rows_raw": 234,
+    "rows_clean": 225,
+    "duplicates_removed": 9,
+    "null_cells_raw": 0
+  },
+  "years": [1999, 2008],
+  "manufacturer_count": 15,
+  "model_count": 38,
+  "median_highway_mpg": 25.0,
+  "median_city_mpg": 17.0,
+  "median_combined_proxy": 20.25,
+  "year_comparison": {
+    "1999": {"observations": 114.0, "median_city_mpg": 17.0, "median_highway_mpg": 25.0, "median_combined_proxy": 20.5, "median_fuel_intensity": 4.878048780487805},
+    "2008": {"observations": 111.0, "median_city_mpg": 17.0, "median_highway_mpg": 25.0, "median_combined_proxy": 20.150000000000002, "median_fuel_intensity": 4.962779156327543}
+  },
+  "mann_whitney_u": 6654.0,
+  "mann_whitney_pvalue": 0.5034205262746985,
+  "most_efficient_class": "compact",
+  "most_efficient_class_median_proxy": 23.15,
+  "least_efficient_class": "pickup",
+  "least_efficient_class_median_proxy": 14.8,
+  "top_manufacturer_by_proxy": "honda",
+  "top_manufacturer_median_proxy": 28.775
+}
