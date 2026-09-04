@@ -51,11 +51,11 @@ The source contained **234 rows**. The pipeline removed **9 exact duplicate rows
 
 ## Exploratory Data Analysis
 
-![Fuel economy by year](reports/figures/fuel_economy_by_year.png)
+![Fuel economy by year](reports/figures/fuel_economy_by_year.svg)
 
-![Efficiency by class](reports/figures/efficiency_by_class.png)
+![Efficiency by class](reports/figures/efficiency_by_class.svg)
 
-![Displacement vs highway MPG](reports/figures/displacement_vs_highway_mpg.png)
+![Displacement vs highway MPG](reports/figures/displacement_vs_highway_mpg.svg)
 
 ## Key Insights
 
@@ -69,7 +69,7 @@ The source contained **234 rows**. The pipeline removed **9 exact duplicate rows
 
 Executed SQL results are committed in [`reports/sql_results.md`](reports/sql_results.md). Queries demonstrate CTEs, `CASE WHEN`, aggregation, minimum-sample filtering and window-function ranking.
 
-![Manufacturer benchmark](reports/figures/manufacturer_efficiency.png)
+![Manufacturer benchmark](reports/figures/manufacturer_efficiency.svg)
 
 ## Machine Learning
 
