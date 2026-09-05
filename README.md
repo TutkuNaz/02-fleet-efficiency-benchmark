@@ -1,12 +1,12 @@
 # Fleet Efficiency Benchmark
 
-[![CI](https://github.com/atasardacagan/02-fleet-efficiency-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/atasardacagan/02-fleet-efficiency-benchmark/actions/workflows/ci.yml)
+[![CI](https://github.com/TutkuNaz/02-fleet-efficiency-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/TutkuNaz/02-fleet-efficiency-benchmark/actions/workflows/ci.yml)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 A reproducible Python and SQL benchmark of historical EPA-derived vehicle fuel economy, with model-paired inference and fleet-oriented consumption metrics.
 
-Part of the [Automotive Open Data Hub](https://github.com/atasardacagan/automotive-data-portfolio), a curated collection of automotive datasets and reproducible starter analyses.
+Part of the [Automotive Open Data Hub](https://github.com/TutkuNaz/automotive-data-portfolio), a curated collection of automotive datasets and reproducible starter analyses.
 
 ## What this project answers
 
