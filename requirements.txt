@@ -4,4 +4,4 @@ matplotlib==3.10.8
 scipy>=1.14,<2
 plotly==6.5.2
 plotnine==0.15.3
-pytest==9.0.2
+pytest==9.1.1
