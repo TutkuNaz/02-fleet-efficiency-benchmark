@@ -1,1 +1,1 @@
-"""Fleet efficiency benchmarking package."""
+"""Fleet-efficiency benchmarking package."""

@@ -10,7 +10,7 @@ CREATE TABLE vehicles (
     hwy INTEGER,
     fl TEXT,
     class TEXT,
-    combined_mpg_proxy REAL,
+    combined_mpg REAL,
     fuel_intensity_gal_per_100mi REAL,
     efficiency_band TEXT
 );

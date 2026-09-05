@@ -1,26 +1,60 @@
 {
   "data_quality": {
     "rows_raw": 234,
-    "rows_clean": 225,
-    "duplicates_removed": 9,
+    "rows_clean": 234,
+    "duplicate_rows_detected": 9,
+    "invalid_rows_removed": 0,
     "null_cells_raw": 0
   },
-  "years": [1999, 2008],
+  "years": [
+    1999,
+    2008
+  ],
+  "source_observations_by_year": {
+    "1999": 117,
+    "2008": 117
+  },
   "manufacturer_count": 15,
   "model_count": 38,
-  "median_highway_mpg": 25.0,
+  "median_highway_mpg": 24.0,
   "median_city_mpg": 17.0,
-  "median_combined_proxy": 20.25,
+  "median_combined_mpg": 19.348837209302324,
   "year_comparison": {
-    "1999": {"observations": 114.0, "median_city_mpg": 17.0, "median_highway_mpg": 25.0, "median_combined_proxy": 20.5, "median_fuel_intensity": 4.878048780487805},
-    "2008": {"observations": 111.0, "median_city_mpg": 17.0, "median_highway_mpg": 25.0, "median_combined_proxy": 20.150000000000002, "median_fuel_intensity": 4.962779156327543}
+    "1999": {
+      "models": 38.0,
+      "median_city_mpg": 16.25,
+      "median_highway_mpg": 24.25,
+      "median_combined_mpg": 18.808484834683366,
+      "median_fuel_intensity": 5.339783601060775
+    },
+    "2008": {
+      "models": 38.0,
+      "median_city_mpg": 16.25,
+      "median_highway_mpg": 24.0,
+      "median_combined_mpg": 18.869235386897053,
+      "median_fuel_intensity": 5.304339833759591
+    }
   },
-  "mann_whitney_u": 6654.0,
-  "mann_whitney_pvalue": 0.5034205262746985,
+  "paired_comparison": {
+    "older_year": 1999,
+    "newer_year": 2008,
+    "paired_models": 38,
+    "median_change_mpg": 0.9676254846559011,
+    "bootstrap_95_ci_mpg": [
+      0.29875776203072135,
+      1.3736663406235827
+    ],
+    "models_improved": 29,
+    "models_unchanged": 0,
+    "models_declined": 9,
+    "wilcoxon_statistic": 134.0,
+    "wilcoxon_pvalue": 0.0006039522126336515
+  },
   "most_efficient_class": "compact",
-  "most_efficient_class_median_proxy": 23.15,
+  "most_efficient_class_median_mpg": 22.64150943396226,
   "least_efficient_class": "pickup",
-  "least_efficient_class_median_proxy": 14.8,
-  "top_manufacturer_by_proxy": "honda",
-  "top_manufacturer_median_proxy": 28.775
+  "least_efficient_class_median_mpg": 14.539473684210526,
+  "manufacturer_minimum_distinct_models": 3,
+  "top_manufacturer": "volkswagen",
+  "top_manufacturer_median_mpg": 22.655799980809697
 }

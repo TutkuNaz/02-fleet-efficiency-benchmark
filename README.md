@@ -1,120 +1,110 @@
 # Fleet Efficiency Benchmark
 
-A historical vehicle-efficiency benchmark using an EPA-derived sample of popular 1999 and 2008 models.
+[![CI](https://github.com/atasardacagan/02-fleet-efficiency-benchmark/actions/workflows/ci.yml/badge.svg)](https://github.com/atasardacagan/02-fleet-efficiency-benchmark/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-## Objective
+A reproducible Python and SQL benchmark of historical EPA-derived vehicle fuel economy, with model-paired inference and fleet-oriented consumption metrics.
 
-The project compares vehicle classes, engine displacement and model-year groups from a fleet-efficiency perspective. The goal is to identify meaningful operating-efficiency trade-offs without overstating what a small historical sample can support.
+Part of the [Automotive Open Data Hub](https://github.com/atasardacagan/automotive-data-portfolio), a curated collection of automotive datasets and reproducible starter analyses.
 
-Questions addressed:
+## What this project answers
 
-- Which vehicle classes are most efficient in the sample?
-- How does engine displacement relate to highway fuel economy?
-- Is there a measurable difference between the selected 1999 and 2008 groups?
-- Which manufacturers rank highest after applying minimum sample thresholds?
-- How does fuel intensity change across displacement segments?
+- How did fuel economy change for the same 38 popular models between 1999 and 2008?
+- Which vehicle classes and drivetrain groups differ most in fuel intensity?
+- How does engine displacement relate to highway MPG?
+- Which manufacturers rank highest when the threshold is based on distinct models rather than configuration count?
 
 ## Data
 
-Source: `plotnine.data.mpg` — **234 rows and 11 variables**, documented as an EPA-derived subset covering 38 popular models from 1999 and 2008.
+Source: [plotnine.data.mpg](https://plotnine.org/reference/mpg.html), a 234-row, 11-variable teaching sample derived from U.S. EPA / fueleconomy.gov data. It contains 117 configuration observations in each of 1999 and 2008 and covers the same 38 popular models in both years.
 
-- Documentation: https://plotnine.org/reference/mpg.html
-- Original provenance: U.S. EPA / fueleconomy.gov
-- EPA open-data license: https://edg.epa.gov/EPA_Data_License.html
-- Raw input is generated locally with `python scripts/download_data.py`.
+The pipeline detects nine exact duplicate source rows but retains the published observations. Blind deletion would create an unintended 114-versus-111 year imbalance. Statistical comparison instead aggregates configurations to one median observation per model-year and pairs the 38 shared models. See [data/README.md](data/README.md).
 
-See [`data/README.md`](data/README.md) for provenance details.
+## Correct fuel-economy calculation
 
-## Approach
+EPA combined MPG is calculated on a consumption basis, not as an arithmetic average:
 
-1. Standardize fields and remove exact duplicates.
-2. Apply basic data-quality checks.
-3. Calculate a weighted analytical MPG proxy: `0.55 × city MPG + 0.45 × highway MPG`.
-4. Convert the proxy to gallons per 100 miles for an operating-cost-oriented view.
-5. Materialize the analytical dataset in SQLite.
-6. Use SQL for class, manufacturer and displacement benchmarking.
-7. Compare model-year distributions with a Mann–Whitney U test.
+    combined MPG = 1 / (0.55 / city MPG + 0.45 / highway MPG)
+    gallons per 100 miles = 100 × (0.55 / city MPG + 0.45 / highway MPG)
 
-The weighted MPG measure is an analytical proxy created for this project; it is not an official EPA combined MPG rating.
+The 55% city / 45% highway method follows the [EPA fuel-economy calculation](https://nepis.epa.gov/Exe/ZyPURL.cgi?Dockey=P100B3EQ.TXT). Gallons per 100 miles makes operating consumption additive and easier to compare across vehicles.
 
-## Stack
+## Analytical design
 
-Python · pandas · NumPy · SciPy · SQLite · SQL · Matplotlib · pytest · GitHub Actions
+1. Validate the source schema and numeric ranges.
+2. Preserve the balanced 234-row source while reporting duplicate observations.
+3. Calculate EPA combined MPG and gallons per 100 miles.
+4. Aggregate configurations to model-year medians.
+5. Pair all models represented in both years.
+6. Estimate the median paired change with a deterministic bootstrap interval.
+7. Test the paired difference with a two-sided Wilcoxon signed-rank test.
+8. Materialize the cleaned data in SQLite and execute version-controlled SQL.
 
-## Data Quality
-
-The source contains **234 rows**. After removing **9 exact duplicates**, the analytical dataset contains **225 rows** with no source null cells.
-
-## Analysis
+## Findings
 
 ![Fuel economy by year](reports/figures/fuel_economy_by_year.svg)
 
 ![Efficiency by class](reports/figures/efficiency_by_class.svg)
 
-![Displacement vs highway MPG](reports/figures/displacement_vs_highway_mpg.svg)
+![Displacement versus highway MPG](reports/figures/displacement_vs_highway_mpg.svg)
 
-Key findings:
+In this selected historical sample:
 
-- Median city/highway MPG is **17 / 25** in both model-year groups.
-- Median weighted efficiency proxy: **20.50 MPG** for 1999 and **20.15 MPG** for 2008.
-- Mann–Whitney U test: **p = 0.503**, providing no statistically clear evidence of a distribution shift in this sample.
-- Compact vehicles have the highest median proxy at **23.15 MPG**; pickups have the lowest at **14.80 MPG**.
-- Average fuel intensity rises from roughly **3.63 gal/100 mi** below 2.0L displacement to **6.19 gal/100 mi** at 3.0L and above.
+- the paired median change from 1999 to 2008 is approximately **+0.97 combined MPG**;
+- **29 of 38** paired models improve and 9 decline;
+- the deterministic 95% bootstrap interval for the median change is approximately **+0.30 to +1.37 MPG**;
+- the paired Wilcoxon test gives **p < 0.001**;
+- compact vehicles have the highest class median, while pickups have the lowest;
+- larger-displacement groups consume materially more gallons per 100 miles.
 
-## SQL
+These results describe a deliberately selected model sample. They do not imply that every 2008 vehicle is more efficient than every 1999 vehicle.
 
-The SQL analysis includes CTEs, `CASE WHEN`, aggregation, sample-size filters and window-function ranking.
+## Manufacturer benchmark
 
 ![Manufacturer benchmark](reports/figures/manufacturer_efficiency.svg)
 
-Executed results are available in [`reports/sql_results.md`](reports/sql_results.md).
+The manufacturer table first creates model-year aggregates and then requires at least three distinct models. This prevents a manufacturer represented by many configurations of one model from being presented as a broad manufacturer benchmark.
 
-## Statistical Interpretation
+The SQL layer covers balanced year counts, class efficiency, the distinct-model manufacturer threshold, and displacement-segment fuel intensity. The pipeline regenerates [reports/sql_results.md](reports/sql_results.md) directly from [sql/business_analysis.sql](sql/business_analysis.sql).
 
-The main conclusion is not that one model year is categorically better than the other. Within this selected sample, model year alone does not clearly separate efficiency distributions. Vehicle class and engine displacement provide more useful segmentation for the fleet-oriented question.
+## Run locally
 
-No machine-learning model is included because the dataset and business question are better suited to comparative and statistical analysis.
+    python -m venv .venv
+    source .venv/bin/activate
+    python -m pip install -r requirements.txt
+    python scripts/download_data.py
+    python scripts/run_analysis.py
+    python -m pytest -q
 
-## Business Interpretation
+Windows activation: .venv\Scripts\activate
 
-- Compare vehicles within similar duty and class requirements before using MPG as a procurement criterion.
-- Gallons per 100 miles can communicate operating-cost impact more directly than MPG alone.
-- Results from this historical 1999/2008 sample should not be extrapolated to a current fleet.
-- A production total-cost-of-ownership model would require acquisition cost, annual mileage, current fuel prices, maintenance and depreciation.
+The analysis writes a cleaned CSV, an indexed SQLite database, metrics JSON, an executed SQL report, and five SVG figures. Missing output directories are created automatically.
 
-## Run Locally
+## Repository layout
 
-```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python scripts/download_data.py
-python scripts/run_analysis.py --input data/raw/mpg.csv
-pytest -q
-```
-
-## Repository Layout
-
-```text
-02-fleet-efficiency-benchmark/
-├── data/
-├── notebooks/
-├── scripts/
-├── src/fleet_efficiency/
-├── sql/
-├── reports/
-├── tests/
-└── .github/workflows/ci.yml
-```
+    02-fleet-efficiency-benchmark/
+    ├── data/                 # provenance and local data boundaries
+    ├── notebooks/            # transparent exploratory views
+    ├── scripts/              # retrieval and analysis entry points
+    ├── src/fleet_efficiency/ # tested analytical pipeline
+    ├── sql/                  # executable business queries
+    ├── reports/              # compact reference outputs
+    ├── tests/                # formula, pairing, and end-to-end tests
+    └── .github/              # CI and dependency updates
 
 ## Limitations
 
-- The dataset contains selected popular models from only 1999 and 2008.
-- Rows represent vehicle configurations, not fleet utilization records.
-- The weighted MPG metric is project-specific.
-- EPA test-cycle ratings do not equal real-world fleet fuel consumption.
-- Findings are descriptive and should not be interpreted causally.
+- The dataset covers selected popular models from only 1999 and 2008.
+- Rows represent tested configurations, not sales-weighted fleets or utilization records.
+- EPA ratings do not equal real-world consumption for a specific route, load, climate, or driver.
+- Manufacturer rankings remain descriptive and are not procurement recommendations.
+- A total-cost-of-ownership model also needs acquisition cost, mileage, fuel price, maintenance, and depreciation.
+
+## Contributing and security
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the evidence checklist. Report vulnerabilities privately using [SECURITY.md](SECURITY.md).
 
 ## License
 
-EPA-produced data are generally public domain unless otherwise specified. plotnine is MIT licensed and documents the dataset as EPA-derived. Repository code and original analysis are MIT licensed.
+Repository code and original analysis are MIT licensed. EPA-produced data are generally public domain unless otherwise specified; plotnine is MIT licensed. Consult each upstream source for its current terms.

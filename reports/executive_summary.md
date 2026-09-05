@@ -1,10 +1,11 @@
 # Executive Summary — Fleet Efficiency Benchmark
 
-- **225** unique analytical rows remain after removing 9 exact duplicates from the 234-row EPA-derived sample.
-- Median city/highway MPG is **17 / 25** in both selected model-year groups.
-- Weighted efficiency proxy: **20.50** in 1999 vs **20.15** in 2008.
-- Mann–Whitney **p=0.503**: no statistically clear distribution shift in this selected sample.
-- Compact vehicles rank highest by median proxy; pickups lowest.
-- Larger-displacement segments show materially higher gallons-per-100-mile fuel intensity.
+- All **234** published configuration observations are retained: **117** in 1999 and **117** in 2008.
+- Nine exact duplicate source rows are detected and disclosed; inference is performed on **38 paired model-year medians**.
+- EPA combined MPG uses the harmonic 55% city / 45% highway consumption formula.
+- The paired median change is **+0.97 MPG**; 29 models improve and 9 decline.
+- The deterministic 95% bootstrap interval is **+0.30 to +1.37 MPG**; two-sided paired Wilcoxon **p < 0.001**.
+- Compact vehicles rank highest by median combined MPG and pickups lowest in this selected sample.
+- Manufacturer results require at least three distinct models, preventing configuration count from masquerading as manufacturer breadth.
 
-The analysis supports segment-level fleet screening, not current-market procurement decisions.
+This historical benchmark supports segment-level screening, not current-market procurement or real-world fleet consumption claims.

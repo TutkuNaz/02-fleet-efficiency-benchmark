@@ -1,45 +1,42 @@
-# SQL analysis outputs — 02-fleet-efficiency-benchmark
+# Executed SQL results
 
-## Query 1
+Generated from the 234-row EPA-derived sample.
 
-| year | observations | avg_city_mpg | avg_highway_mpg | avg_combined_proxy |
+## 1. Balanced source observations by model year
+
+| year | source_observations | distinct_models | avg_city_mpg | avg_highway_mpg | avg_combined_mpg |
+| --- | --- | --- | --- | --- | --- |
+| 1999 | 117 | 38 | 17.02 | 23.43 | 19.38 |
+| 2008 | 117 | 38 | 16.7 | 23.45 | 19.17 |
+
+## 2. Vehicle-class efficiency and consumption benchmark
+
+| class | observations | avg_combined_mpg | avg_gal_per_100mi | efficiency_rank |
 | --- | --- | --- | --- | --- |
-| 1999 | 114 | 16.99122807017544 | 23.42105263157895 | 19.884649122807016 |
-| 2008 | 111 | 16.855855855855857 | 23.7027027027027 | 19.936936936936938 |
+| subcompact | 35 | 23.24 | 4.47 | 1 |
+| compact | 47 | 23.11 | 4.41 | 2 |
+| midsize | 41 | 21.81 | 4.62 | 3 |
+| 2seater | 5 | 18.56 | 5.39 | 4 |
+| minivan | 11 | 18.21 | 5.56 | 5 |
+| suv | 62 | 15.23 | 6.74 | 6 |
+| pickup | 33 | 14.49 | 7.06 | 7 |
 
-## Query 2
+## 3. Manufacturer benchmark using distinct models rather than configuration rows
 
-| class | observations | avg_efficiency_proxy | avg_gal_per_100mi | efficiency_rank |
-| --- | --- | --- | --- | --- |
-| compact | 47 | 23.804255319148936 | 4.27704396721257 | 1 |
-| subcompact | 34 | 23.758823529411767 | 4.365949834318344 | 2 |
-| midsize | 41 | 22.597560975609756 | 4.456396175801829 | 3 |
-| 2seater | 5 | 19.630000000000003 | 5.101998121444648 | 4 |
-| minivan | 9 | 18.616666666666667 | 5.445173717788796 | 5 |
-| suv | 59 | 15.58135593220339 | 6.593438857376353 | 6 |
-| pickup | 30 | 14.725 | 6.953815456916383 | 7 |
+| manufacturer | distinct_models | model_year_observations | avg_combined_mpg | avg_displacement | efficiency_rank |
+| --- | --- | --- | --- | --- | --- |
+| volkswagen | 4 | 8 | 23.81 | 2.26 | 1 |
+| toyota | 6 | 12 | 20.41 | 3.22 | 2 |
+| audi | 3 | 6 | 20.35 | 2.66 | 3 |
+| nissan | 3 | 6 | 20 | 3.33 | 4 |
+| chevrolet | 4 | 8 | 17.24 | 5.08 | 5 |
+| ford | 4 | 8 | 15.46 | 4.66 | 6 |
+| dodge | 4 | 8 | 14.67 | 4.49 | 7 |
 
-## Query 3
-
-| manufacturer | observations | avg_efficiency_proxy | avg_displacement | efficiency_rank |
-| --- | --- | --- | --- | --- |
-| honda | 8 | 28.15625 | 1.725 | 1 |
-| volkswagen | 27 | 24.65925925925926 | 2.2555555555555555 | 2 |
-| hyundai | 14 | 22.339285714285715 | 2.4285714285714284 | 3 |
-| subaru | 14 | 22.114285714285717 | 2.457142857142857 | 4 |
-| audi | 18 | 21.586111111111112 | 2.5444444444444443 | 5 |
-| toyota | 34 | 21.4014705882353 | 2.9529411764705884 | 6 |
-| pontiac | 5 | 21.23 | 3.96 | 7 |
-| nissan | 13 | 21.01923076923077 | 3.269230769230769 | 8 |
-| chevrolet | 18 | 18.180555555555557 | 5.050000000000001 | 9 |
-| ford | 24 | 16.45625 | 4.558333333333334 | 10 |
-| jeep | 8 | 15.356250000000001 | 4.575 | 11 |
-| dodge | 31 | 15.083870967741936 | 4.406451612903226 | 12 |
-
-## Query 4
+## 4. Engine-size segmentation and fuel intensity
 
 | displacement_segment | observations | avg_highway_mpg | avg_gal_per_100mi |
 | --- | --- | --- | --- |
-| <2.0L | 21 | 33.24 | 3.63 |
-| 2.0-2.9L | 78 | 26.81 | 4.47 |
-| 3.0L+ | 126 | 19.94 | 6.19 |
+| <2.0L | 22 | 33.18 | 3.73 |
+| 2.0-2.9L | 78 | 26.81 | 4.59 |
+| 3.0L+ | 134 | 19.88 | 6.36 |
